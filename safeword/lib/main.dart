@@ -78,15 +78,13 @@ class _SplashState extends State<_Splash> {
     await Future.delayed(const Duration(milliseconds: 1200));
     if (!mounted) return;
 
-    // If user has a session and vault is unlocked → vault
-    // If session but locked → login (re-enter master password)
-    // If no session → login
-    final isLoggedIn = AuthService.isLoggedIn;
+    // STRICT: Always sign out on startup to ensure no account is pre-logged in.
+    // This makes the app safe to share as it always starts from a clean slate.
+    await AuthService.signOut();
 
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
-        pageBuilder: (_, __, ___) =>
-            isLoggedIn ? const VaultListScreen() : const LoginScreen(),
+        pageBuilder: (_, __, ___) => const LoginScreen(),
         transitionsBuilder: (_, anim, __, child) =>
             FadeTransition(opacity: anim, child: child),
         transitionDuration: const Duration(milliseconds: 500),

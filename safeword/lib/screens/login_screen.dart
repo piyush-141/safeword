@@ -111,7 +111,9 @@ class _LoginScreenState extends State<LoginScreen>
     } on AuthException catch (e) {
       setState(() => _errorMessage = e.message);
     } catch (e) {
-      setState(() => _errorMessage = e.toString().replaceFirst('Exception: ', ''));
+      setState(
+        () => _errorMessage = e.toString().replaceFirst('Exception: ', ''),
+      );
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -136,8 +138,11 @@ class _LoginScreenState extends State<LoginScreen>
                 const SizedBox(height: 28),
                 if (_isLoading)
                   const Center(
-                      child: CircularProgressIndicator(
-                          color: AppTheme.ink, strokeWidth: 2))
+                    child: CircularProgressIndicator(
+                      color: AppTheme.ink,
+                      strokeWidth: 2,
+                    ),
+                  )
                 else
                   _buildSubmitButton(),
                 const SizedBox(height: 20),
@@ -222,10 +227,13 @@ class _LoginScreenState extends State<LoginScreen>
             obscureText: _obscurePassword,
             suffixIcon: IconButton(
               icon: Icon(
-                _obscurePassword ? Icons.visibility_off_rounded : Icons.visibility_rounded,
+                _obscurePassword
+                    ? Icons.visibility_off_rounded
+                    : Icons.visibility_rounded,
                 color: AppTheme.textMuted,
               ),
-              onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+              onPressed: () =>
+                  setState(() => _obscurePassword = !_obscurePassword),
             ),
             validator: (v) {
               if (v == null || v.isEmpty) return 'Password is required';
@@ -242,7 +250,9 @@ class _LoginScreenState extends State<LoginScreen>
             obscureText: _obscureMaster,
             suffixIcon: IconButton(
               icon: Icon(
-                _obscureMaster ? Icons.visibility_off_rounded : Icons.visibility_rounded,
+                _obscureMaster
+                    ? Icons.visibility_off_rounded
+                    : Icons.visibility_rounded,
                 color: AppTheme.textMuted,
               ),
               onPressed: () => setState(() => _obscureMaster = !_obscureMaster),
@@ -292,21 +302,23 @@ class _LoginScreenState extends State<LoginScreen>
         suffixIcon: suffixIcon,
         helperText: helperText,
         helperStyle: GoogleFonts.sofiaSans(
-            color: AppTheme.signalOrange, fontSize: 11),
+          color: AppTheme.signalOrange,
+          fontSize: 11,
+        ),
         helperMaxLines: 2,
         filled: true,
         fillColor: AppTheme.white,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 24,
+          vertical: 16,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(999),
-          borderSide:
-              const BorderSide(color: Color(0x33141413), width: 1),
+          borderSide: const BorderSide(color: Color(0x33141413), width: 1),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(999),
-          borderSide:
-              const BorderSide(color: Color(0x22141413), width: 1),
+          borderSide: const BorderSide(color: Color(0x22141413), width: 1),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(999),
@@ -358,7 +370,10 @@ class _LoginScreenState extends State<LoginScreen>
         Text(
           'Strength: ${labels[level]}',
           style: GoogleFonts.sofiaSans(
-              color: colors[level], fontSize: 12, fontWeight: FontWeight.w500),
+            color: colors[level],
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ],
     );
@@ -374,13 +389,20 @@ class _LoginScreenState extends State<LoginScreen>
       ),
       child: Row(
         children: [
-          const Icon(Icons.error_outline_rounded,
-              color: AppTheme.danger, size: 18),
+          const Icon(
+            Icons.error_outline_rounded,
+            color: AppTheme.danger,
+            size: 18,
+          ),
           const SizedBox(width: 10),
           Expanded(
-            child: Text(msg,
-                style: GoogleFonts.sofiaSans(
-                    color: AppTheme.danger, fontSize: 13)),
+            child: Text(
+              msg,
+              style: GoogleFonts.sofiaSans(
+                color: AppTheme.danger,
+                fontSize: 13,
+              ),
+            ),
           ),
         ],
       ),
@@ -394,11 +416,11 @@ class _LoginScreenState extends State<LoginScreen>
         backgroundColor: AppTheme.ink,
         foregroundColor: AppTheme.canvas,
         minimumSize: const Size(double.infinity, 54),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         elevation: 0,
         textStyle: GoogleFonts.sofiaSans(
-          fontSize: 16, fontWeight: FontWeight.w500,
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
           letterSpacing: -0.32,
         ),
       ),
@@ -412,8 +434,7 @@ class _LoginScreenState extends State<LoginScreen>
       children: [
         Text(
           _isLogin ? "Don't have an account? " : 'Already have an account? ',
-          style: GoogleFonts.sofiaSans(
-              color: AppTheme.slate, fontSize: 14),
+          style: GoogleFonts.sofiaSans(color: AppTheme.slate, fontSize: 14),
         ),
         TextButton(
           onPressed: _toggleMode,

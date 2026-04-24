@@ -1,0 +1,31 @@
+# SafeWord Project Root Gitignore
+
+# macOS
+.DS_Store
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+
+# Node.js (Backend)
+safeword-backend/node_modules/
+safeword-backend/.env
+safeword-backend/*.log
+safeword-backend/npm-debug.log*
+safeword-backend/yarn-debug.log*
+safeword-backend/yarn-error.log*
+
+# Flutter (App)
+safeword/.dart_tool/
+safeword/.flutter-plugins
+safeword/.flutter-plugins-dependencies
+safeword/.packages
+safeword/.pub/
+safeword/build/
+safeword/android/app/debug/
+safeword/android/app/profile/
+safeword/android/app/release/
+safeword/ios/Flutter/.last_build_id
+safeword/ios/Flutter/Generated.xcconfig
+safeword/ios/Flutter/flutter_export_environment.sh

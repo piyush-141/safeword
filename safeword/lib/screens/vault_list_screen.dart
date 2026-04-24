@@ -82,10 +82,13 @@ class _VaultListScreenState extends State<VaultListScreen>
   void _navigateToLock() {
     AuthService.lock();
     if (!mounted) return;
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => const LockScreen()),
-      (_) => false,
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const LockScreen()),
+        (_) => false,
+      );
+    });
   }
 
   Future<void> _load({String? search}) async {

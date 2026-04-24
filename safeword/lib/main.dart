@@ -107,11 +107,12 @@ class _SplashState extends State<_Splash> {
               width: 80,
               height: 80,
               decoration: BoxDecoration(
-                color: AppTheme.ink,
                 borderRadius: BorderRadius.circular(24),
+                image: const DecorationImage(
+                  image: AssetImage('assets/app_icon.png'),
+                  fit: BoxFit.cover,
+                ),
               ),
-              child: const Icon(Icons.shield_rounded,
-                  color: AppTheme.canvas, size: 44),
             ),
             const SizedBox(height: 28),
             Text(

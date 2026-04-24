@@ -255,13 +255,11 @@ class _VaultListScreenState extends State<VaultListScreen>
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: AppTheme.ink,
               shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.shield_rounded,
-              color: AppTheme.canvas,
-              size: 22,
+              image: const DecorationImage(
+                image: AssetImage('assets/app_icon.png'),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           const SizedBox(width: 12),

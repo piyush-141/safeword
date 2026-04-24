@@ -160,11 +160,12 @@ class _LoginScreenState extends State<LoginScreen>
           width: 56,
           height: 56,
           decoration: const BoxDecoration(
-            color: AppTheme.ink,
             shape: BoxShape.circle,
+            image: DecorationImage(
+              image: AssetImage('assets/app_icon.png'),
+              fit: BoxFit.cover,
+            ),
           ),
-          child: const Icon(Icons.shield_rounded,
-              color: AppTheme.canvas, size: 30),
         ),
         const SizedBox(height: 24),
         Text(

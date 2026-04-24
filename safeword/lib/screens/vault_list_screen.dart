@@ -89,6 +89,10 @@ class _VaultListScreenState extends State<VaultListScreen>
   }
 
   Future<void> _load({String? search}) async {
+    if (!AuthService.isUnlocked) {
+      _navigateToLock();
+      return;
+    }
     setState(() {
       _isLoading = true;
       _error = null;
@@ -119,9 +123,9 @@ class _VaultListScreenState extends State<VaultListScreen>
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Delete failed: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Delete failed: $e')));
       }
     }
   }
@@ -136,8 +140,11 @@ class _VaultListScreenState extends State<VaultListScreen>
       SnackBar(
         content: Row(
           children: [
-            const Icon(Icons.check_circle_rounded,
-                color: AppTheme.accentGreen, size: 18),
+            const Icon(
+              Icons.check_circle_rounded,
+              color: AppTheme.accentGreen,
+              size: 18,
+            ),
             const SizedBox(width: 10),
             Text(
               'Password copied — clears in ${AppConfig.clipboardClearSeconds}s',
@@ -172,21 +179,25 @@ class _VaultListScreenState extends State<VaultListScreen>
   void _openAddEdit({Credential? credential, String? initialCategory}) {
     _resetInactivityTimer();
     Navigator.of(context)
-        .push(MaterialPageRoute(
-          builder: (_) => AddEditCredentialScreen(
-            credential: credential,
-            initialCategory: initialCategory,
+        .push(
+          MaterialPageRoute(
+            builder: (_) => AddEditCredentialScreen(
+              credential: credential,
+              initialCategory: initialCategory,
+            ),
           ),
-        ))
+        )
         .then((_) => _load());
   }
 
   void _openDetail(Credential credential) {
     _resetInactivityTimer();
     Navigator.of(context)
-        .push(MaterialPageRoute(
-          builder: (_) => CredentialDetailScreen(credential: credential),
-        ))
+        .push(
+          MaterialPageRoute(
+            builder: (_) => CredentialDetailScreen(credential: credential),
+          ),
+        )
         .then((_) => _load());
   }
 
@@ -208,17 +219,24 @@ class _VaultListScreenState extends State<VaultListScreen>
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () => _openAddEdit(),
           icon: const Icon(Icons.add_rounded, size: 20),
-          label: Text('Add',
-              style: GoogleFonts.sofiaSans(
-                  fontWeight: FontWeight.w500, fontSize: 16,
-                  letterSpacing: -0.32)),
+          label: Text(
+            'Add',
+            style: GoogleFonts.sofiaSans(
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
+              letterSpacing: -0.32,
+            ),
+          ),
           backgroundColor: AppTheme.ink,
           foregroundColor: AppTheme.canvas,
           elevation: 0,
-          extendedPadding:
-              const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+          extendedPadding: const EdgeInsets.symmetric(
+            horizontal: 24,
+            vertical: 14,
+          ),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20)),
+            borderRadius: BorderRadius.circular(20),
+          ),
         ),
       ),
     );
@@ -237,8 +255,11 @@ class _VaultListScreenState extends State<VaultListScreen>
               color: AppTheme.ink,
               shape: BoxShape.circle,
             ),
-            child: const Icon(Icons.shield_rounded,
-                color: AppTheme.canvas, size: 22),
+            child: const Icon(
+              Icons.shield_rounded,
+              color: AppTheme.canvas,
+              size: 22,
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -291,12 +312,18 @@ class _VaultListScreenState extends State<VaultListScreen>
         decoration: InputDecoration(
           hintText: 'Search by title or username…',
           hintStyle: GoogleFonts.sofiaSans(color: AppTheme.dust, fontSize: 15),
-          prefixIcon: const Icon(Icons.search_rounded,
-              color: AppTheme.slate, size: 20),
+          prefixIcon: const Icon(
+            Icons.search_rounded,
+            color: AppTheme.slate,
+            size: 20,
+          ),
           suffixIcon: _searchCtrl.text.isNotEmpty
               ? IconButton(
-                  icon: const Icon(Icons.clear_rounded,
-                      color: AppTheme.slate, size: 18),
+                  icon: const Icon(
+                    Icons.clear_rounded,
+                    color: AppTheme.slate,
+                    size: 18,
+                  ),
                   onPressed: () {
                     _searchCtrl.clear();
                     _load();
@@ -305,17 +332,17 @@ class _VaultListScreenState extends State<VaultListScreen>
               : null,
           filled: true,
           fillColor: AppTheme.white,
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 14,
+          ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(999),
-            borderSide:
-                const BorderSide(color: Color(0xFFE2DDD9), width: 1),
+            borderSide: const BorderSide(color: Color(0xFFE2DDD9), width: 1),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(999),
-            borderSide:
-                const BorderSide(color: Color(0xFFE2DDD9), width: 1),
+            borderSide: const BorderSide(color: Color(0xFFE2DDD9), width: 1),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(999),
@@ -328,7 +355,9 @@ class _VaultListScreenState extends State<VaultListScreen>
 
   Widget _buildBody() {
     if (_isLoading) {
-      return const Center(child: CircularProgressIndicator(color: AppTheme.primary));
+      return const Center(
+        child: CircularProgressIndicator(color: AppTheme.primary),
+      );
     }
 
     if (_error != null) {
@@ -345,22 +374,33 @@ class _VaultListScreenState extends State<VaultListScreen>
                   color: Color(0xFFFFEDED),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.cloud_off_rounded,
-                    color: AppTheme.danger, size: 34),
+                child: const Icon(
+                  Icons.cloud_off_rounded,
+                  color: AppTheme.danger,
+                  size: 34,
+                ),
               ),
               const SizedBox(height: 20),
               Text(
                 _error!,
                 textAlign: TextAlign.center,
                 style: GoogleFonts.sofiaSans(
-                    color: AppTheme.danger, fontSize: 14,
-                    fontWeight: FontWeight.w400),
+                  color: AppTheme.danger,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
               const SizedBox(height: 24),
               SizedBox(
                 width: 160,
                 child: ElevatedButton.icon(
-                  onPressed: _load,
+                  onPressed: () {
+                    if (!AuthService.isUnlocked) {
+                      _navigateToLock();
+                    } else {
+                      _load();
+                    }
+                  },
                   icon: const Icon(Icons.refresh_rounded, size: 18),
                   label: const Text('Try Again'),
                   style: ElevatedButton.styleFrom(
@@ -388,10 +428,15 @@ class _VaultListScreenState extends State<VaultListScreen>
                   color: AppTheme.canvas,
                   shape: BoxShape.circle,
                   border: Border.all(
-                      color: const Color(0xFFE2DDD9), width: 1.5),
+                    color: const Color(0xFFE2DDD9),
+                    width: 1.5,
+                  ),
                 ),
-                child: const Icon(Icons.lock_open_outlined,
-                    color: AppTheme.ink, size: 40),
+                child: const Icon(
+                  Icons.lock_open_outlined,
+                  color: AppTheme.ink,
+                  size: 40,
+                ),
               ),
               const SizedBox(height: 24),
               Text(
@@ -411,7 +456,9 @@ class _VaultListScreenState extends State<VaultListScreen>
                     ? 'Tap + Add to save your first credential'
                     : 'Try a different search term',
                 style: GoogleFonts.sofiaSans(
-                    color: AppTheme.slate, fontSize: 14),
+                  color: AppTheme.slate,
+                  fontSize: 14,
+                ),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -483,54 +530,91 @@ class _VaultListScreenState extends State<VaultListScreen>
   Widget _buildCategoryCard(String category, List<Credential> credentials) {
     // Sort credentials by date (latest first)
     final latest = List<Credential>.from(credentials)
-      ..sort((a, b) => b.id.compareTo(a.id)); // Using ID for stability if date isn't available
-    
+      ..sort(
+        (a, b) => b.id.compareTo(a.id),
+      ); // Using ID for stability if date isn't available
+
     final preview = latest.take(3).toList();
 
     IconData icon;
     Color iconBg;
-    switch (category.toLowerCase()) {
-      case 'social':
-        icon = Icons.public;
-        iconBg = const Color(0xFFE3F2FD);
-        break;
-      case 'tech':
-        icon = Icons.laptop;
-        iconBg = const Color(0xFFE8F5E9);
-        break;
-      case 'shopping':
-        icon = Icons.shopping_cart_outlined;
-        iconBg = const Color(0xFFFFF3E0);
-        break;
-      case 'finance':
-        icon = Icons.account_balance_outlined;
-        iconBg = const Color(0xFFF3E5F5);
-        break;
-      case 'health':
-        icon = Icons.favorite_outline;
-        iconBg = const Color(0xFFFFEBEE);
-        break;
-      case 'travel':
-        icon = Icons.airplanemode_active;
-        iconBg = const Color(0xFFE0F7FA);
-        break;
-      case 'entertainment':
-        icon = Icons.videogame_asset_outlined;
-        iconBg = const Color(0xFFF3E5F5);
-        break;
-      default:
-        icon = Icons.more_horiz;
-        iconBg = const Color(0xFFF5F5F5);
+    final catLower = category.toLowerCase();
+
+    if (catLower.contains('social') || catLower.contains('media')) {
+      icon = Icons.public_rounded;
+      iconBg = const Color(0xFFE3F2FD); // Light Blue
+    } else if (catLower.contains('tech') ||
+        catLower.contains('dev') ||
+        catLower.contains('code') ||
+        catLower.contains('git')) {
+      icon = Icons.terminal_rounded;
+      iconBg = const Color(0xFFE8F5E9); // Light Green
+    } else if (catLower.contains('cloud') ||
+        catLower.contains('server') ||
+        catLower.contains('aws') ||
+        catLower.contains('gcp')) {
+      icon = Icons.cloud_queue_rounded;
+      iconBg = const Color(0xFFE0F7FA); // Cyan
+    } else if (catLower.contains('shop') ||
+        catLower.contains('e-comm') ||
+        catLower.contains('buy')) {
+      icon = Icons.shopping_bag_outlined;
+      iconBg = const Color(0xFFFFF3E0); // Light Orange
+    } else if (catLower.contains('finance') ||
+        catLower.contains('bank') ||
+        catLower.contains('money') ||
+        catLower.contains('wallet')) {
+      icon = Icons.account_balance_wallet_outlined;
+      iconBg = const Color(0xFFF3E5F5); // Light Purple
+    } else if (catLower.contains('edu') ||
+        catLower.contains('academic') ||
+        catLower.contains('study') ||
+        catLower.contains('college') ||
+        catLower.contains('university')) {
+      icon = Icons.school_outlined;
+      iconBg = const Color(0xFFFFF9C4); // Light Yellow
+    } else if (catLower.contains('productivity') ||
+        catLower.contains('work') ||
+        catLower.contains('task') ||
+        catLower.contains('office')) {
+      icon = Icons.fact_check_outlined;
+      iconBg = const Color(0xFFE0E0E0); // Light Grey
+    } else if (catLower.contains('health') ||
+        catLower.contains('fitness') ||
+        catLower.contains('med')) {
+      icon = Icons.favorite_border_rounded;
+      iconBg = const Color(0xFFFFEBEE); // Light Red
+    } else if (catLower.contains('travel') ||
+        catLower.contains('trip') ||
+        catLower.contains('flight')) {
+      icon = Icons.explore_outlined;
+      iconBg = const Color(0xFFF1F8E9); // Light Lime
+    } else if (catLower.contains('entertainment') ||
+        catLower.contains('stream') ||
+        catLower.contains('movie') ||
+        catLower.contains('music')) {
+      icon = Icons.play_circle_outline_rounded;
+      iconBg = const Color(0xFFFCE4EC); // Light Pink
+    } else if (catLower.contains('game') || catLower.contains('play')) {
+      icon = Icons.sports_esports_outlined;
+      iconBg = const Color(0xFFD1C4E9); // Deep Purple
+    } else {
+      icon = Icons.category_outlined;
+      iconBg = const Color(0xFFF5F5F5);
     }
 
     return InkWell(
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (_) => CategoryDetailScreen(
-            category: category,
-            credentials: credentials,
-          ),
-        )).then((_) => _load());
+        Navigator.of(context)
+            .push(
+              MaterialPageRoute(
+                builder: (_) => CategoryDetailScreen(
+                  category: category,
+                  credentials: credentials,
+                ),
+              ),
+            )
+            .then((_) => _load());
       },
       borderRadius: BorderRadius.circular(20),
       child: Container(
@@ -559,22 +643,31 @@ class _VaultListScreenState extends State<VaultListScreen>
                     color: iconBg,
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(icon, size: 20, color: AppTheme.ink.withOpacity(0.7)),
+                  child: Icon(
+                    icon,
+                    size: 20,
+                    color: AppTheme.ink.withOpacity(0.7),
+                  ),
                 ),
                 Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.add_circle_outline_rounded,
-                          color: AppTheme.ink, size: 22),
-                      onPressed: () =>
-                          _openAddEdit(initialCategory: category),
+                      icon: const Icon(
+                        Icons.add_circle_outline_rounded,
+                        color: AppTheme.ink,
+                        size: 22,
+                      ),
+                      onPressed: () => _openAddEdit(initialCategory: category),
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
                       tooltip: 'Add to $category',
                     ),
                     const SizedBox(width: 8),
-                    const Icon(Icons.chevron_right_rounded,
-                        color: AppTheme.slate, size: 20),
+                    const Icon(
+                      Icons.chevron_right_rounded,
+                      color: AppTheme.slate,
+                      size: 20,
+                    ),
                   ],
                 ),
               ],
@@ -592,31 +685,30 @@ class _VaultListScreenState extends State<VaultListScreen>
             ),
             Text(
               '${credentials.length} credential${credentials.length == 1 ? '' : 's'}',
-              style: GoogleFonts.sofiaSans(
-                color: AppTheme.slate,
-                fontSize: 12,
-              ),
+              style: GoogleFonts.sofiaSans(color: AppTheme.slate, fontSize: 12),
             ),
             const Spacer(),
             // Preview of 2-3 items
-            ...preview.map((c) => InkWell(
-              onTap: () => _openDetail(c),
-              borderRadius: BorderRadius.circular(4),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 2),
-                child: Text(
-                  '• ${c.title}',
-                  style: GoogleFonts.sofiaSans(
-                    color: AppTheme.slate,
-                    fontSize: 11,
-                    decoration: TextDecoration.underline,
-                    decorationColor: AppTheme.slate.withOpacity(0.3),
+            ...preview.map(
+              (c) => InkWell(
+                onTap: () => _openDetail(c),
+                borderRadius: BorderRadius.circular(4),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 2),
+                  child: Text(
+                    '• ${c.title}',
+                    style: GoogleFonts.sofiaSans(
+                      color: AppTheme.slate,
+                      fontSize: 11,
+                      decoration: TextDecoration.underline,
+                      decorationColor: AppTheme.slate.withOpacity(0.3),
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
               ),
-            )),
+            ),
           ],
         ),
       ),
